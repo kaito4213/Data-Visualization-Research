@@ -1,0 +1,172 @@
+<html>
+	<head lang="en">
+		<script src="https://d3js.org/d3.v4.min.js"></script>
+		<meta charset="UTF-8">
+		<title>hello</title>
+		<style>
+			button {
+				position: absolute;
+				margin-left: 6px;
+				margin-top: 6px;
+			}
+		</style>
+	</head>
+<body>
+	<button id="start">Transition</button>
+<script>
+//add SVG
+	var svgPanel = d3.select('body').append('svg').attr('width', 800).attr('height', 800);
+
+//add rectangles
+	var rectangleData = [{'xaxis': 400, 'yaxis': 200, 'width': 50, 'height': 50, 'color': 'yellow'}];
+
+	var rectangle_init = svgPanel.selectAll('rect').data(rectangleData).enter().append('rect');
+
+	var rectangle = rectangle_init.attr('x', function(d){return d.xaxis;})
+								  .attr('y', function(d){return d.yaxis;})
+								  .attr('width', function(d){return d.width;})
+								  .attr('height', function(d){return d.height;})
+								  .attr('fill', function(d){return d.color;});
+ // Add Circles
+
+  var circlesData = [{'xaxis': 100, 'yaxis': 100, 'radius': 30, 'color': 'red'}];
+  
+  var circle_init = svgPanel.selectAll("circle").data(circlesData).enter().append("circle");
+  
+  var circles = circle_init.attr("cx", function(d){return d.xaxis;})
+         .attr("cy", function(d){return d.yaxis;})
+         .attr("r", function(d){return d.radius;})
+         .attr("fill", function(d){return d.color;});
+
+ // Add lines
+
+  var linesDta = [{'x1': 100, 'y1': 70, 'x2': 100, 'y2': 40, 'stroke': 'orange', 'stroke-width': '5'}, 
+  				  {'x1': 100, 'y1': 130, 'x2': 100, 'y2': 160, 'stroke': 'orange', 'stroke-width': '5'},
+  				  {'x1': 130, 'y1': 100, 'x2': 160, 'y2': 100, 'stroke': 'orange', 'stroke-width': '5'},
+  				  {'x1': 70, 'y1': 100, 'x2': 40, 'y2': 100, 'stroke': 'orange', 'stroke-width': '5'},
+  				  {'x1': 121, 'y1': 79, 'x2': 142, 'y2': 58, 'stroke': 'orange', 'stroke-width': '5'}, 
+  				  {'x1': 121, 'y1': 121, 'x2': 142, 'y2': 142, 'stroke': 'orange', 'stroke-width': '5'},
+  				  {'x1': 79, 'y1': 79, 'x2': 58, 'y2': 58, 'stroke': 'orange', 'stroke-width': '5'},
+  				  {'x1': 79, 'y1': 121, 'x2': 58, 'y2': 142, 'stroke': 'orange', 'stroke-width': '5'}];
+
+  var line_init = svgPanel.selectAll('line').data(linesDta).enter().append('line');
+
+  var lines = line_init.attr("x1", function(d){return d.x1;})
+  		 			   .attr("y1", function(d){return d.y1;})
+  		  			   .attr("x2", function(d){return d.x2;})
+  		   			   .attr("y2", function(d){return d.y2;})
+  		    		   .attr("stroke", function(d){return d.stroke;})
+  		               .attr("stroke-width", function(d){return d.strokewidth;});
+
+// Add Polygons
+    var polygonData = [{'x': 400, 'y': 250}, {'x': 450, 'y': 250}, {'x': 500, 'y': 300},
+  		      {'x': 450, 'y': 300}];
+
+  	var	polygonVertice = d3.line().x(function(d){return d.x})
+  								 .y(function(d){return d.y});
+
+  	var parallelogram = svgPanel.append('path').attr('d', polygonVertice(polygonData))
+  											   .attr('stroke','purple')
+  											   .attr('stroke-width',1)
+  											   .attr('fill', 'purple');
+
+
+  	var triangleData1 = [{'x': 450, 'y': 300}, {'x': 310, 'y': 300}, {'x': 380, 'y': 230}];
+
+  	var	triangle1Vertice = d3.line().x(function(d){return d.x})
+  								 .y(function(d){return d.y});
+
+  	var triangle1 = svgPanel.append('path').attr('d', triangle1Vertice(triangleData1))
+  											   .attr('stroke','red')
+  											   .attr('stroke-width',1)
+  											   .attr('fill', 'red');
+
+
+    var triangleData2 = [{'x': 475, 'y': 300}, {'x': 335, 'y': 300}, {'x': 405, 'y': 370}];
+
+  	var	triangle2Vertice = d3.line().x(function(d){return d.x})
+  								 .y(function(d){return d.y});
+
+  	var triangle2 = svgPanel.append('path').attr('d', triangle2Vertice(triangleData2))
+  											   .attr('stroke','green')
+  											   .attr('stroke-width',1)
+  											   .attr('fill', 'green');
+
+
+  	var triangleData3 = [{'x': 475, 'y': 300}, {'x': 475, 'y': 370}, {'x': 405, 'y': 370}];
+
+  	var	triangle3Vertice = d3.line().x(function(d){return d.x})
+  								 .y(function(d){return d.y});
+
+  	var triangle3 = svgPanel.append('path').attr('d', triangle3Vertice(triangleData3))
+  											   .attr('stroke','teal')
+  											   .attr('stroke-width',1)
+  											   .attr('fill', 'teal');
+
+
+    var triangleData4 = [{'x': 405, 'y': 370}, {'x': 335, 'y': 370}, {'x': 370, 'y': 335}];
+
+  	var	triangle4Vertice = d3.line().x(function(d){return d.x})
+  								 .y(function(d){return d.y});
+
+  	var triangle4 = svgPanel.append('path').attr('d', triangle4Vertice(triangleData4))
+  											   .attr('stroke','darkblue')
+  											   .attr('stroke-width',1)
+  											   .attr('fill', 'darkblue');
+
+    var triangleData5 = [{'x': 335, 'y': 370}, {'x': 370, 'y': 335}, {'x': 335, 'y': 300}];
+
+  	var	triangle5Vertice = d3.line().x(function(d){return d.x})
+  								 .y(function(d){return d.y});
+
+  	var triangle5 = svgPanel.append('path').attr('d', triangle5Vertice(triangleData5))
+  											   .attr('stroke','coral')
+  											   .attr('stroke-width',1)
+  											   .attr('fill', 'coral');
+
+//Transition
+	d3.select('#start').on('click',function(){
+		rectangle.transition()
+				 .attr('x', 520)
+				 .attr('y',370);
+
+		var triangleData = [{'x': 500, 'y': 300}, {'x': 570, 'y': 370}, {'x': 430, 'y': 370}];
+		var	triangleVertice = d3.line().x(function(d){return d.x})
+  								 .y(function(d){return d.y});
+		triangle1.transition()
+				.attr('d', triangleVertice(triangleData));
+
+		var triangleData = [{'x': 500, 'y': 300}, {'x': 360, 'y': 300}, {'x': 430, 'y': 370}];
+		var	triangleVertice = d3.line().x(function(d){return d.x})
+  								 .y(function(d){return d.y});
+  		triangle2.transition()
+				.attr('d', triangleVertice(triangleData));
+
+		var triangleData = [{'x': 360, 'y': 300}, {'x': 310, 'y': 250}, {'x': 310, 'y': 350}];
+		var	triangleVertice = d3.line().x(function(d){return d.x})
+  								 .y(function(d){return d.y});
+  		triangle3.transition()
+				.attr('d', triangleVertice(triangleData));
+
+		var triangleData = [{'x': 380, 'y': 370}, {'x': 380, 'y': 420}, {'x': 430, 'y': 420}];
+		var	triangleVertice = d3.line().x(function(d){return d.x})
+  								 .y(function(d){return d.y});
+  		triangle4.transition()
+				.attr('d', triangleVertice(triangleData));
+
+		var triangleData = [{'x': 275, 'y': 315}, {'x': 310, 'y': 280}, {'x': 310, 'y': 350}];
+		var	triangleVertice = d3.line().x(function(d){return d.x})
+  								 .y(function(d){return d.y});
+  		triangle5.transition()
+				.attr('d', triangleVertice(triangleData));
+
+		var parallelogramData = [{'x': 430, 'y': 370}, {'x': 430, 'y': 420}, {'x': 380, 'y': 370},
+		                         {'x': 380,'y': 320}];
+		var	parallelogramVertice = d3.line().x(function(d){return d.x})
+  								 .y(function(d){return d.y});
+  		parallelogram.transition()
+				.attr('d', parallelogramVertice(parallelogramData));
+
+	});
+</script>
+</html>
