@@ -1,0 +1,8 @@
+reference link: http://music-timeline.appspot.com/
+![img](/images/music.png)
+
+This visualization uses data from the Google Music Play library, Google Research compiled an impressive timeline of the popularity of various musical genres from 1950 to present day. Popularity was determined by how many users have an artist or album in their Google library. You can explore various sub-genres and see which specific artists were most popular within a given time. As a part of visualization, they have also categorized songs based on Countries. When you select one genre, songs related to that genre comes as the search result. To refine the search, you can select one partiular genre, and drill down inside basd on popularity and year. 
+
+There are several features that I admire:  you can highlight key artists in each genre and read their stories, and of course navigate to Google Play and hear their music. You can also take a closer look at changes in the vocabulary used to name artists and their work, or search for a particular artist to see if they went multi-platinum or were just a one-hit wonder. When you hover your mouse, they have annoted various section of results with year which links the with the visualization. When you select a particular genre, you can further refine the search results by selecting the particular year or get popular songs by selecting high popularity curve.
+
+The idea of improving the usability of an application is really cool. Maybe I can use the same idea in my final project.
