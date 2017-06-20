@@ -1,0 +1,61 @@
+# R&D Cost from 2013-2015: Ordinal 
+![alt text](https://github.com/kaito4213/lab-deconstruct/blob/master/img/investment.png)
+
+The R&D cost visualization shows the ordinal investiment of each company.
+
+Company name is mapped to the colors and the year is mapped to the darkness. Companies are ranked from higher investment to lower investment.
+
+It is clear to see the difference between different companies and the difference between years of one company. Besides, it's also good that this visualization will hide the detailed number and give you a overview, if you want to see how much the company invested in the year, you can hover the mouse to see the detail.
+
+But, there is also a bad thing of this visulization: the colorful bars are so close to each other, it is hard for users to distinguish which belongs to the same company at the first sight.
+
+
+# Average annual expenditures in the U.S. : Ratio
+![alt text](https://github.com/kaito4213/lab-deconstruct/blob/master/img/average%20annual%20expenditures.png)
+
+Average annual expenditures in the U.S. shows the families' average expenditures on each breakdown. 
+The ratio of expenditure breakdown is mapped to the area of sector in the pie chart. The color is mapped to the different breakdowns.
+
+It is helpful both in comparing total expenditure in different years and knowing what's the part of each expenditures in one year.I think it's great and I didn't find any bad part of this pucture.
+
+
+
+# Sex in America (age): Interval
+![alt text](https://github.com/kaito4213/lab-deconstruct/blob/master/img/americansex_interval.png)
+
+The Sex in America graph shows how social behavior influences on sexual behavior. What we want to analysis is the second graph, in which it conveys different sexual behavior of various age intervals.
+
+There are two primary variables: age intervals, number of sex partners after 18.
+
+The age intervals is interval data, and mapped to the tag in the layout. Number of sex partners is also intervl data, presented by different color. When the color get more vibrant, it means at the specific age interval, people have more partners.
+
+Using tags to show interval data is pretty straightforward, and the vibrant colors used to show number of sex partners data is also a good choice. But the “+” sign, which is applied to separate different number of sex partners group is a little confusing at first sight. And, the colors chosen to present “ 0 partners” and “1 partners” are similar, so it seems a difficult to separate. Generally speaking, the graph has done great job.
+
+The interval data could be aggregated and transformed, so this is why at the bottom of the graph it shows population ratio ruler and the medium number of sex partners in the right. But it could just provide a general idea, not exact number of the percentage of sex partners number distribution.
+
+# Mountains out of Molehills:Nominal
+![alt text](https://github.com/kaito4213/lab-deconstruct/blob/master/img/mountains_nominal.png)
+
+The time-line of media-inflamed fear shows with time goes, how media-inflamed issues’ intensity differ.
+
+The two primary variables: media-inflamed issue and intensity. The issue’s name is mapped to different color tags in the layout. Height of the mountain shows the intensity, which is number of news media mentions. And the width of the mountain shows the time span.
+
+This a great visual encoding. Tags described by distinctly various color are pretty perceivable. The intensity and time coverage is clear.
+
+The nominal data could not be aggregated or transformed, since it would be meaningless if we do that. So it just show as the raw data.
+
+
+# Marrying age : Ratio and Nominal
+![alt text](https://github.com/kaito4213/lab-deconstruct/blob/master/img/marrying%20age.png)
+
+This shows when Americans get married. The primary variables are the rate of male and female marrige at the given age. The rate is mapped to the lines. You can change the employment status, education and race by clicking the button. 
+
+It provides a good overview of the difference of male and female marriage ages and the trend of when people most likely get married. The nominal data can be aggregated transformed to see the particular kind of people marriage age trend. 
+
+But it is some kind of difficult to compare the trends between two groups, for example, white and black. You can only get an overview separately.
+
+
+
+
+
+
