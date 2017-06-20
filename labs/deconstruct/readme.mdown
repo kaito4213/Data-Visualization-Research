@@ -1,5 +1,5 @@
 # R&D Cost from 2013-2015: Ordinal 
-![alt text](https://github.com/kaito4213/lab-deconstruct/blob/master/img/investment.png)
+![alt text](https://github.com/kaito4213/data-visualization/blob/master/labs/deconstruct/img/investment.png)
 
 The R&D cost visualization shows the ordinal investiment of each company.
 
@@ -11,7 +11,7 @@ But, there is also a bad thing of this visulization: the colorful bars are so cl
 
 
 # Average annual expenditures in the U.S. : Ratio
-![alt text](https://github.com/kaito4213/lab-deconstruct/blob/master/img/average%20annual%20expenditures.png)
+![alt text](https://github.com/kaito4213/data-visualization/blob/master/labs/deconstruct/img/average%20annual%20expenditures.png)
 
 Average annual expenditures in the U.S. shows the families' average expenditures on each breakdown. 
 The ratio of expenditure breakdown is mapped to the area of sector in the pie chart. The color is mapped to the different breakdowns.
@@ -21,7 +21,7 @@ It is helpful both in comparing total expenditure in different years and knowing
 
 
 # Sex in America (age): Interval
-![alt text](https://github.com/kaito4213/lab-deconstruct/blob/master/img/americansex_interval.png)
+![alt text](https://github.com/kaito4213/data-visualization/blob/master/labs/deconstruct/img/americansex_interval.png)
 
 The Sex in America graph shows how social behavior influences on sexual behavior. What we want to analysis is the second graph, in which it conveys different sexual behavior of various age intervals.
 
@@ -34,7 +34,7 @@ Using tags to show interval data is pretty straightforward, and the vibrant colo
 The interval data could be aggregated and transformed, so this is why at the bottom of the graph it shows population ratio ruler and the medium number of sex partners in the right. But it could just provide a general idea, not exact number of the percentage of sex partners number distribution.
 
 # Mountains out of Molehills:Nominal
-![alt text](https://github.com/kaito4213/lab-deconstruct/blob/master/img/mountains_nominal.png)
+![alt text](https://github.com/kaito4213/data-visualization/blob/master/labs/deconstruct/img/mountains_nominal.png)
 
 The time-line of media-inflamed fear shows with time goes, how media-inflamed issues’ intensity differ.
 
@@ -46,7 +46,7 @@ The nominal data could not be aggregated or transformed, since it would be meani
 
 
 # Marrying age : Ratio and Nominal
-![alt text](https://github.com/kaito4213/lab-deconstruct/blob/master/img/marrying%20age.png)
+![alt text](https://github.com/kaito4213/data-visualization/blob/master/labs/deconstruct/img/marrying%20age.png)
 
 This shows when Americans get married. The primary variables are the rate of male and female marrige at the given age. The rate is mapped to the lines. You can change the employment status, education and race by clicking the button. 
 

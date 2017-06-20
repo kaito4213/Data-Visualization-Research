@@ -8,7 +8,7 @@ Team:
 - Yujun Tian
 
 ## Introduction 
-https://kaito4213.github.io/lab-map/
+https://kaito4213.github.io/data-visualization/
 
 We achieve this map on the basis of the map of unemployment rate in U.S. Red related color is great choice to present the concept of drought. To represent the drought data, we choose schemaReds to present the order of drought. Darker color shows in that area, the drought problem is more serious. Red related color is great choice to present the concept of drought. Besides, to make the border of county visible, we added and modified the "stroke" attribute in the css part. 
 
