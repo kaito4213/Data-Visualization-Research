@@ -1,0 +1,80 @@
+---
+title: "Lasso and MLR"
+author: "Xiaojun Wang"
+date: "2017/4/30"
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r echo = FALSE}
+library(ggplot2)
+data2<-read.table('results.csv',sep=',',header=TRUE)
+data2
+
+ggplot(data = data2, mapping = aes(x = hitnumber, y = percentage)) + geom_bar(stat= 'identity',width= 0.3,fill='steelblue') + geom_text(mapping = aes(label = percentage),
+size = 3, colour = 'black', vjust = 1, hjust = .5, position = position_dodge(0.9)) + ggtitle("Auto - Lasso coefficient")
+
+```
+```{r echo = FALSE}
+data3<-read.table('bike.csv',sep=',',header=TRUE)
+data3
+
+ggplot(data = data3, mapping = aes(x = hitnumber, y = percentage)) + geom_bar(stat= 'identity',width= 0.3,fill='steelblue') + geom_text(mapping = aes(label = percentage),
+size = 3, colour = 'black', vjust = 1, hjust = .5, position = position_dodge(0.9)) + ggtitle("Bike sharing - Lasso coefficient")
+
+```
+```{r echo = FALSE}
+data4<-read.table('cigar.csv',sep=',',header=TRUE)
+data4
+
+ggplot(data = data4, mapping = aes(x = hitnumber, y = percentage)) + geom_bar(stat= 'identity',width= 0.3,fill='steelblue') + geom_text(mapping = aes(label = percentage),
+size = 3, colour = 'black', vjust = 1, hjust = .5, position = position_dodge(0.9)) + ggtitle("Cigar - Lasso coefficient")
+
+```
+```{r echo = FALSE}
+data4<-read.table('sales.csv',sep=',',header=TRUE)
+data4
+
+ggplot(data = data4, mapping = aes(x = hitnumber, y = percentage)) + geom_bar(stat= 'identity',width= 0.3,fill='steelblue') + geom_text(mapping = aes(label = percentage),
+size = 3, colour = 'black', vjust = 1, hjust = .5, position = position_dodge(0.9)) + ggtitle("Sales - Lasso coefficient")
+
+```
+```{r echo = FALSE}
+data4<-read.table('auto_m.csv',sep=',',header=TRUE)
+data4
+
+ggplot(data = data4, mapping = aes(x = hitnumber, y = percentage)) + geom_bar(stat= 'identity',position='dodge', width= 0.3,fill='steelblue') + geom_text(mapping = aes(label = percentage),
+size = 3, colour = 'black', vjust = 1, hjust = .5, position = position_dodge(0.9)) + ggtitle("Auto - Multiple coefficient") + facet_wrap(~level)
+
+```
+```{r echo = FALSE}
+data4<-read.table('bike_m.csv',sep=',',header=TRUE)
+data4
+
+ggplot(data = data4, mapping = aes(x = hitnumber, y = percentage)) + geom_bar(stat= 'identity',position='dodge', width= 0.3,fill='steelblue') + geom_text(mapping = aes(label = percentage),
+size = 3, colour = 'black', vjust = 1, hjust = .5, position = position_dodge(0.9)) + ggtitle("Bike - Multiple coefficient") + facet_wrap(~level)
+
+```
+```{r echo = FALSE}
+data4<-read.table('cigar_m.csv',sep=',',header=TRUE)
+data4
+
+ggplot(data = data4, mapping = aes(x = hitnumber, y = percentage)) + geom_bar(stat= 'identity',position='dodge', width= 0.3,fill='steelblue') + geom_text(mapping = aes(label = percentage),
+size = 3, colour = 'black', vjust = 1, hjust = .5, position = position_dodge(0.9)) + ggtitle("Cigar - Multiple coefficient") + facet_wrap(~level)
+
+```
+```{r echo = FALSE}
+data4<-read.table('sales_m.csv',sep=',',header=TRUE)
+data4
+
+ggplot(data = data4, mapping = aes(x = hitnumber, y = percentage)) + geom_bar(stat= 'identity',position='dodge', width= 0.3,fill='steelblue') + geom_text(mapping = aes(label = percentage),
+size = 3, colour = 'black', vjust = 1, hjust = .5, position = position_dodge(0.9)) + ggtitle("Sales - Multiple coefficient") + facet_wrap(~level)
+
+```

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Questionnaire</title>
+    <meta charset="utf-8">
+    <link href="content/shared/styles/examples-offline.css" rel="stylesheet">
+    <link href="styles/kendo.common.min.css" rel="stylesheet">
+    <link href="styles/kendo.rtl.min.css" rel="stylesheet">
+    <link href="styles/kendo.default.min.css" rel="stylesheet">
+    <link href="styles/kendo.default.mobile.min.css" rel="stylesheet">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jszip.min.js"></script>
+    <script src="js/kendo.all.min.js"></script>
+    <script src="content/shared/js/console.js"></script>
+	
+	<script src="https://d3js.org/d3.v3.min.js"></script>
+    <script>
+        
+    </script>
+    
+    
+</head>
+<body>
+<h1 class="km-bold-font">How will you decide the main independent variables?</h1>
+<br>
+<h3 class="km-light-font">Here we have four datasets. For each dataset, there is one dependent variable which will be influenced by many other independent variables. The scatter plots show how these independent variables response with the dependent variable. We wondering how will you arrange the priority of the independent variables through these plots. You can drag the variables in the left box to the right box. E.X. For the first dataset, if you think the prority of variable horsepower is important than weight, just place the tag horsepower upon the tag weight.</h3>
+<h3>When you finished all the sortings, please click 'submit' to download your answers.</h3>
+<h3>We appreciate for your participation. </h3>
+            <div class="demo-section hidden-on-narrow two-way wide">
+                <div class="list-wrapper">
+				<div style="text-align:center" >
+					<h5>Auto Data Set<h5>
+					<p>What factors will influence the Gas mileage of vehicle? Here we get a dataset of 392 vehicles  with the following 8 variables. We set the mpg which means miles the vehicle could driving per gallon as the dependent variable in this case. Please ordered the other independent variables base on the scatter plot. You can hover your cursor on the tag in the box to see the variable description.</p>
+					<img style="width:100%;height:100%" src="img/AutoPlot.png"/>
+				</div>
+				</div>
+                    <ul id="sortable-listA" style="min-height: 110px;">
+                        <li class="list-item" title="Number of cylinders between 4 and 8">Cylinders</li>
+                        <li class="list-item" title="Engine displacement (cu. inches)">Displacement</li>
+                        <li class="list-item" title="Engine horsepower">Horsepower</li>
+                        <li class="list-item" title="Vehicle weight (lbs.)">Weight</li>
+						<li class="list-item" title="Time to accelerate from 0 to 60 mph (sec.)">Acceleration</li>
+                        <li class="list-item" title="Model year (modulo 100)">Year</li>
+                        <li class="list-item" title="Origin of car (1. American, 2. European, 3. Japanese)">Origin</li>
+                    </ul>
+
+                    <ul id="sortable-listB" style="min-height: 110px;">
+                       
+                    </ul>
+					</div>
+            </div>
+			
+			<div class="demo-section hidden-on-narrow two-way wide">
+				<div style="text-align:center" >
+					<h5>Bike Sharing Data Set<h5>
+					<p>What factors will influence the Gas mileage of vehicle? Here we get a dataset of 10887 vehicles with the following 8 variables from Jan 2011 to Dec 2012. We set the count which means the number of total rentals in one hour as the dependent variable in this case. Please ordered the other independent variables base on the scatter plot. You can hover your cursor on the tag in the box to see the variable description.</p>
+
+					<img style="width:100%;height:100%" src="img/BikeSharing.png"/>
+				</div>
+                <div class="list-wrapper">
+                    <ul id="sortable-listC" style="min-height: 110px;">
+                        <li class="list-item" title="Current hour">Hour</li>
+                        <li class="list-item" title="Current month">Month</li>
+                        <li class="list-item" title="whether the day is considered a holiday">Holiday </li>
+						<li class="list-item" title="whether the day is considered a weekend">Weekend</li>
+                        <li class="list-item" title="temperature in Celsius">temp</li>
+                        <li class="list-item" title="'Feels like' temperature in Celsius">atemp </li>
+                        <li class="list-item" title="Relative humidity">Humidity </li>
+                        <li class="list-item" title="Wind speed">Windspeed</li>
+                    </ul>
+					
+                    <ul id="sortable-listD" style="min-height: 110px;">
+                       
+                    </ul>
+                </div>
+            </div>
+			
+			<div class="demo-section hidden-on-narrow two-way wide">
+				<div style="text-align:center" >
+					<h5>Cigarette Consumption<h5>
+					<p>What factors will influence the cigraette consupton? Here we get a dataset of 1380 observations  with the following 8 variables. We set the sales which means cigarette sales in packs per capita as the dependent variable in this case. Please ordered the other independent variables base on the scatter plot. You can hover your cursor on the tag in the box to see the variable description.</p>
+					<img style="width:100%;height:100%" src="img/CigarSalesPlot2.png"/>
+				</div>
+                <div class="list-wrapper">
+                    <ul id="sortable-listE" style="min-height: 110px;">
+                        <li class="list-item" title="state abbreviation">state</li>
+                        <li class="list-item" title="the year">year</li>
+                        <li class="list-item" title="population">pop</li>
+                        <li class="list-item" title="population above the age of 16">pop16</li>
+                        <li class="list-item" title="consumer price index (1983=100)">cpi</li>
+                        <li class="list-item" title="per capita disposable income">npi</li>
+                        <li class="list-item" title="minimum price in adjoining states per pack of cigarettes">primin</li>
+                    </ul>
+
+                    <ul id="sortable-listF" style="min-height: 110px;">
+                       
+                    </ul>
+                </div>
+            </div>
+			
+			<div class="demo-section hidden-on-narrow two-way wide">
+				<div style="text-align:center" >
+					<h5>Sales of Child Car Seats<h5>
+					<p>What factors will influence the Sales of Child Car Seats? Here we give a data set containing sales of child car seats at 400 different stores with  the following 10 variables. We set the sales which means Unit sales (in thousands) at each location as the dependent variable in this case. Please ordered the other independent variables base on the scatter plot. You can hover your cursor on the tag in the box to see the variable description.</p>
+					<img style="width:100%;height:100%" src="img/SalesPlot2.png"/>
+				</div>
+                <div class="list-wrapper">
+                    <ul id="sortable-listG" style="min-height: 110px;">
+                        <li class="list-item" title="Price charged by competitor at each location">ComPrice</li>
+                        <li class="list-item" title="Community income level (in thousands of dollars)">Income</li>
+                        <li class="list-item" title="Local advertising budget for company at each location (in thousands of dollars)">Advertising</li>
+                        <li class="list-item" title="Population size in region (in thousands)">Population</li>
+                        <li class="list-item" title="Price company charges for car seats at each site">Price</li>
+                        <li class="list-item" title="Average age of the local population">Age</li>
+                        <li class="list-item" title="Education level at each location">Education</li>
+                        <li class="list-item" title="A factor with levels No and Yes to indicate whether the store is in an urban or rural location">Urban</li>
+                        <li class="list-item" title="A factor with levels No and Yes to indicate whether the store is in the US or not">US</li>
+                    </ul>
+
+                    <ul id="sortable-listH" style="min-height: 110px;">
+                       
+                    </ul>
+                </div>
+            </div>
+			<div style="text-align:center;padding:30px;">
+			<button id='nextQ'  class="k-primary" value="Next">Submit!</button>
+			</div>
+            <div class="responsive-message"></div>
+
+			<script>
+                $(document).ready(function() {
+                    var tooltip = $(".list-wrapper").kendoTooltip({
+                        filter: "li",
+                        width: 120,
+                        position: "right"
+                    }).data("kendoTooltip");
+                });
+            </script>
+			<script>
+			//Init and download CSV file
+			var userId = generateUUID();
+			var trialDataForCSV = [["userId", "MPG", "Bike-Sharing", "Cigar", "Sales"]];
+			d3.select('#nextQ')
+			.on('click',function(){
+					var mpgResult = "";
+					$("#sortable-listB li").each(function(){
+						mpgResult = mpgResult + ">"+($(this).text());
+						})
+				
+				
+					var bikeResult = "";
+					$("#sortable-listD li").each(function(){
+						bikeResult = bikeResult + ">"+($(this).text());
+						})
+				
+					var cigarResult = [];
+					$("#sortable-listF li").each(function(){
+						cigarResult = cigarResult + ">"+($(this).text());
+						})
+				
+					var salesResult = [];
+					$("#sortable-listH li").each(function(){
+						salesResult = salesResult + ">"+($(this).text());
+						})
+					trialDataForCSV.push([userId, mpgResult, bikeResult, cigarResult, salesResult]);
+					initCSVFile(trialDataForCSV);
+				
+				});
+				function initCSVFile(data){
+				var csvContent = "data:text/csv;charset=utf-8,";
+				data.forEach(function(infoArray, index){
+					dataString = infoArray.join(",");
+					csvContent += index < data.length ? dataString+ "\n" : dataString;
+					}); 
+					var encodedUri = encodeURI(csvContent);
+					var link = document.createElement("a");
+					link.setAttribute("href", encodedUri);
+					link.setAttribute("download", userId +"_data.csv");
+					document.body.appendChild(link);
+
+					link.click(); // This will download the data file named "uuid_data.csv".
+					closeie();
+				};
+				function closeie(){
+				window.close();
+				}
+				//create user unique ID
+			function generateUUID() {
+				var d = new Date().getTime();
+				var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+				var r = (d + Math.random()*16)%16 | 0;
+				d = Math.floor(d/16);
+				return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+				});
+				return uuid;
+				};
+			</script>
+            <script>
+                function placeholder(element) {
+                    return $("<li class='list-item' id='placeholder'>Drop Here!</li>");
+                }
+
+                $(document).ready(function() {
+				  $("#nextQ").kendoButton();
+                    $("#sortable-listA").kendoSortable({
+                        connectWith: "#sortable-listB",
+                        placeholder: placeholder
+                    });
+
+                    $("#sortable-listB").kendoSortable({
+						 connectWith: "#sortable-listA",
+                        placeholder: placeholder
+                    });
+
+                    $("#sortable-listC").kendoSortable({
+                        connectWith: "#sortable-listD",
+                        placeholder: placeholder
+                    });
+
+                    $("#sortable-listD").kendoSortable({
+                        connectWith: "#sortable-listC",
+                        placeholder: placeholder
+                    });
+					
+					$("#sortable-listE").kendoSortable({
+                        connectWith: "#sortable-listF",
+                        placeholder: placeholder
+                    });
+
+                    $("#sortable-listF").kendoSortable({
+                        connectWith: "#sortable-listE",
+                        placeholder: placeholder
+                    });
+					
+					$("#sortable-listG").kendoSortable({
+                        connectWith: "#sortable-listH",
+                        placeholder: placeholder
+                    });
+
+                    $("#sortable-listH").kendoSortable({
+                        connectWith: "#sortable-listG",
+                        placeholder: placeholder
+                    });
+                });
+            </script>
+
+            <style>
+                #example {
+                    -webkit-user-select: none;
+                    -moz-user-select: none;
+                    -ms-user-select: none;
+                    user-select: none;
+                }
+
+                .demo-section {
+					width:70%;
+                    padding: 50px 50px 50px 70px;
+                }
+				.demo-section p {
+                    margin: 0 0 30px;
+                    line-height: 50px;
+                }
+                .demo-section p .k-button {
+                    margin: 0 10px 0 0;
+                }
+                .k-primary {
+                    min-width: 150px;
+                }
+
+                .list-wrapper {
+                    overflow: hidden;
+                }
+
+                #sortable-listA, #sortable-listB, #sortable-listC, #sortable-listD, #sortable-listE, #sortable-listF, #sortable-listG, #sortable-listH {
+                    width: 210px;
+                    min-height: 40px;
+                    margin: 0;
+                    padding: 0;
+                    border: 1px solid #dddddd;
+                    border-radius: 4px;
+                }
+
+                #sortable-listA, #sortable-listC,#sortable-listE, #sortable-listG {
+                    float: left;
+					margin: 0 0 0 150px;
+                }
+
+                #sortable-listB, #sortable-listD,#sortable-listF, #sortable-listH {
+                    float: right;
+					margin: 0 150px 0 0;
+                }
+				.two-way {
+                    background: url('img/two-way.png') no-repeat 50% 80%;
+                }
+                .list-item {
+                    list-style-type: none;
+                    width: 200px;
+                    margin: 5px;
+                    line-height: 30px;
+                    text-align: center;
+                    background-color: #222222;
+                    color: #ffffff;
+                    border-radius: 3px;
+                    cursor: move;
+                }
+
+                #sortable-listA .list-item {
+                    background-color: #000000;
+                    color: #ffffff;
+                }
+
+                #sortable-listB .list-item {
+                    background-color: #ff879e;
+                    color: #000000;
+                }
+
+                #sortable-listC .list-item {
+                    background-color: #000000;
+                    color: #ffffff;
+                }
+
+                #sortable-listD .list-item {
+                    background-color: #ffcc33;
+                    color: #000000;
+                }
+				
+				 #sortable-listE .list-item {
+                    background-color: #000000;
+                    color: #ffffff;
+                }
+
+                #sortable-listF .list-item {
+                    background-color: #54b8fa;
+                    color: #000000;
+                }
+				
+				 #sortable-listG .list-item {
+                   background-color: #000000;
+                    color: #ffffff;
+                }
+
+                #sortable-listH .list-item {
+                    background-color: #66cc66;
+                    color: #000000;
+                }
+
+                #placeholder.list-item {
+                    background-color: #ffffff;
+                    color: #777;
+                }
+            </style>
+        </div>
+
+
+    
+</body>
+</html>
