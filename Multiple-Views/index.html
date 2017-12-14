@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src = "uStates.js"></script>
+    <style>
+        /*TODO*/
+        .state_path{
+        fill: none;
+        stroke: #a9a9a9;
+        stroke-width: 1;
+        }
+        .state_path:hover{
+        fill-opacity:0.5;
+        }
+        .bar_rect:hover{
+        fill-opacity:0.5;
+        }
+        .circles:hover{
+        fill-opacity:0.6;
+        }
+        #tooltip {   
+        position: absolute;           
+        text-align: center;
+        padding: 20px;             
+        margin: 10px;
+        font: 12px sans-serif;        
+        background: lightsteelblue;   
+        border: 1px;      
+        border-radius: 2px;           
+        pointer-events: none;
+        z-index:99999999；         
+        }
+        #tooltip h4{
+        margin:0;
+        font-size:14px;
+        }
+        #tooltip{
+        background:rgba(0,0,0,0.9);
+        border:1px solid grey;
+        border-radius:5px;
+        font-size:12px;
+        width:auto;
+        padding:4px;
+        color:white;
+        opacity:0;
+        }
+        #tooltip table{
+        table-layout:fixed;
+        }
+        #tooltip tr td{
+        padding:0;
+        margin:0;
+        }
+        #tooltip tr td:nth-child(1){
+        width:50px;
+        }
+        #tooltip tr td:nth-child(2){
+        text-align:center;
+        }
+        #map{
+            border-radius: 25px;
+            border: 4px solid #91cf60;
+            height: 630px;
+            width: 960px;
+            position: absolute;
+            top:80px;
+            left: 10px;
+        }
+        #pieChart{
+            border-radius: 25px;
+            border: 4px solid #91cf60;
+            height: 305px;
+            width: 600px;
+            position: absolute;
+            top:80px;
+            left: 980px;
+        }
+        #barChart{
+            border-radius: 25px;
+            border: 4px solid #91cf60;
+            height: 315px;
+            width: 600px;
+            position: absolute;
+            top:395px;
+            left: 980px;
+        }
+        #title{
+            position: absolute;
+            top:0px;
+            left: 350px;
+        }
+        .button {
+        position: absolute;
+        top:15px;
+        left:1410px;
+        display: inline-block;
+        border-radius: 4px;
+        background-color: #f4511e;
+        border: none;
+        color: #FFFFFF;
+        text-align: center;
+        font-size: 28px;
+        padding: 10px;
+        width: 170px;
+        height: 50px;
+        transition: all 0.5s;
+        cursor: pointer;
+        margin: 5px;
+        }
+        .button span {
+        cursor: pointer;
+        display: inline-block;
+        position: relative;
+        transition: 0.5s;
+        }
+        .button span:after {
+        content: '\00bb';
+        position: absolute;
+        opacity: 0;
+        top: 0;
+        right: -20px;
+        transition: 0.5s;
+        }
+        .button:hover span {
+        padding-right: 25px;
+        }
+        .button:hover span:after {
+        opacity: 1;
+        right: 0;
+        }
+
+    </style>
+</head>
+<body>
+<h1 id = "title">Jiaoyan Chen & Yimin Lin - US Police Deaths Multiple Views</h1>
+<div style="width: 100%; overflow: hidden;">  
+    <div id="map" align="left" >
+        
+        <div style="text-align:center; font-size: 25px"> States Where Polices Dead </div>
+    </div>
+    <div id="pieChart" align="center" >
+        <div style="text-align:center; font-size: 25px"> The Cause of Police Deaths</div>
+    </div>
+    <div id="barChart" align="center" >
+      <div style="text-align:center; font-size: 25px"> Police Deaths per Year </div>  
+    </div>
+    <div id = "tooltip"></div>
+</div>
+<div id = 'resetData'>
+    <button class="button" style="vertical-align:middle" onclick="window.location.reload()"><span>Refresh </span></button>
+</div>
+
+<script>
+    
+    var dispatch = d3.dispatch('load');
+    var csvData = undefined;
+    var data = d3.csv('data/police-deaths.csv', function (error, data) {
+        if (error) throw error;
+        // initial load for all of the maps
+        dispatch.load(data);
+        csvData = data;
+
+    });
+
+    // load pieChart with provided data
+    dispatch.on('load.pieChart', function (data) {
+        var map = {};
+
+        //change the column in csv file to a map
+        for (var i = 0; i < data.length; i++) {
+            var key = data[i].cause;
+            if (!map.hasOwnProperty(key)) {
+                map[key] = 1;
+            } else {
+                map[key] += 1;
+            }
+        };
+        var bubbleData = bubbledataprocess1(map);
+        loadPieChartWithProvidedData(bubbleData);
+
+    });
+
+    function clickPieChart(data) {
+        // we need to groom the bar chart data here
+        filterYearByCause(csvData, data.cause);
+    }
+
+
+    var parseDate = d3.time.format("%Y").parse;
+
+    /**
+     * Get the data for a certain cause of death in every year
+     *
+     * @param data read from d3
+     * @param cause the cause of death we want to filter with
+     */
+    function filterYearByCause(data, cause) {
+        // @todo: nuke this boilerplate code
+        d3.select('#barChart svg').remove();
+        d3.select('#statesvg').remove();
+        var map1 = {},
+            map2 = {};
+        //change the column in csv file to a map
+        for (var i = 0; i < data.length; i++) {
+            var key1 = data[i].year;
+            var key2 = data[i].state.substring(1);
+            // maybe this cause of death did not happen in that year, give it a initial value
+            if (!map1.hasOwnProperty(key1)) {
+                map1[key1] = 0;
+            }
+            if (!map2.hasOwnProperty(key2)) {
+                map2[key2] = 0;
+            }
+            // no need to check type
+            if (data[i].cause == cause) {
+                map1[key1]++;
+                map2[key2]++;
+            }
+        }
+        var mapData = mapdataprocess1(map2);
+        //console.log(mapData);
+        var barData = bardataprocess1(map1);
+        loadBarChartWithProvidedData(barData);
+        loadmapwithdata("#statesvg", mapData);
+
+    }
+
+    /**
+     * Get data for a certain year of every type of death cause
+     *
+     * @param data read from d3
+     * @param year which year
+     */
+    function filterCauseByYear(data, rawYear) {
+        d3.select('#pieChart svg').remove();
+        d3.select('#statesvg').remove();
+        var map1 = {},
+            map2 = {};
+        //change the column in csv file to a map
+        for (var i = 0; i < data.length; i++) {
+            var key1 = data[i].cause;
+            var key2 = data[i].state.substring(1);
+            // maybe this cause of death did not happen in that year, give it a initial value
+            if (!map1.hasOwnProperty(key1)) {
+                map1[key1] = 0;
+            }
+            if (!map2.hasOwnProperty(key2)) {
+                map2[key2] = 0;
+            }
+            // no need to check type
+            if (data[i].year == rawYear) {
+                map1[key1]++;
+                map2[key2]++;
+            }
+        };
+        //console.log(data[0].year);
+
+        var bubbleData = bubbledataprocess1(map1);
+        var mapData = mapdataprocess1(map2);
+        //console.log(mapData);
+        //console.log(bubbleData);
+        loadPieChartWithProvidedData(bubbleData);
+        loadmapwithdata("#statesvg", mapData);
+
+
+    }
+
+    dispatch.on('load.barChart', function (data) {
+        var map = {};
+        //change the column in csv file to a map
+        for (var i = 0; i < data.length; i++) {
+            var key = data[i].year;
+            if (!map.hasOwnProperty(key)) {
+                map[key] = 1;
+            } else {
+                map[key] += 1;
+            }
+        }
+
+        var barData = bardataprocess1(map);
+        loadBarChartWithProvidedData(barData);
+    });
+
+    /**
+     * With provided bubble data, visualize a pie chart
+     *
+     * @todo: add comment for data structure
+     *
+     * @param bubbleData
+     */
+    function loadPieChartWithProvidedData(bubbleData) {
+        var bubbleChartWidth = 300;
+        var bubbleChartHeight = 300;
+        // append a svg to pieChart div
+        var svgPie = d3.select("#pieChart").append("svg")
+            .attr("width", bubbleChartWidth)
+            .attr("height", bubbleChartHeight)
+            .append("g")
+            .attr("class", "bubble_chart");
+
+        var color = d3.scale.category20();
+
+        var bubble = d3.layout.pack()
+            .sort(null)
+            .size([bubbleChartHeight, bubbleChartWidth])
+            .padding(1.5); // padding between adjacent circles
+
+        var nodes = bubble.nodes({children: bubbleData}).filter(function (d) {
+            return !d.children;
+        });
+        //console.log(nodes[0].cause);
+
+        //setup the chart
+        var bubbles = svgPie.append('g').attr("class","bubble")
+            .selectAll(".bubble")
+            .data(nodes)
+            .enter();
+        function bubbletoolTip(d){
+                return "<h4>"+d.cause+"</h4><table>"+
+                    "<tr><td>Death</td><td>"+d.value+"</td></tr>"+
+                    "</table>"; 
+        };
+        function mouseOverbubble(d){
+            d3.select("#tooltip").transition().duration(200).style("opacity", .9);              
+            d3.select("#tooltip").html(bubbletoolTip(d))  
+            .style("left", (d3.event.pageX) + "px")     
+            .style("top", (d3.event.pageY - 28) + "px");
+        };
+
+        function mouseOutbubble(){
+            d3.select("#tooltip").transition().duration(500).style("opacity", 0);      
+        };
+        // draw each circle
+        bubbles.append("circle")
+            .attr("class","circles")
+            .attr("r", function (d) {
+                return d.r
+            })
+            .attr("cx", function (d) {
+                //console.log(d);
+                return d.x;
+            })
+            .attr("cy", function (d) {
+                return d.y;
+            })
+            .attr('opacity',0.8)
+            .style("fill", function (d) {
+                return color(d.value / 10);
+            })
+            .on("mouseover", mouseOverbubble).on("mouseout", mouseOutbubble)
+            .on('click', function (data) {
+                clickPieChart(data);
+            });
+
+         bubbles.append("text")
+                .attr("x", function(d){ return d.x; })
+                .attr("y", function(d){ return d.y + 5; })
+                .attr("text-anchor", "middle")
+                .text(function(d){ return d["cause"]; })
+                .style({ "fill":"black", 
+                        "font-family": "Helvetica Neue, Helvetica, Arial, san-serif",
+                      "font-size": function(d) { 
+                      if (d.r < 10) {return "0px";}
+                      else {return Math.min(2 * d.r, (2 * d.r - 8) / this.getComputedTextLength() * 15) + "px"; }}
+            });
+
+    }
+
+    /**
+     * With provided bar data, visualize a bar chart
+     *
+     * @todo: add comment for data structure
+     *
+     * @param barData
+     */
+    function loadBarChartWithProvidedData(barData) {
+
+        var margin = {top: 20, right: 20, bottom: 70, left: 40},
+            width = 600 - margin.left - margin.right,
+            height = 300 - margin.top - margin.bottom;
+
+        var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
+        var y = d3.scale.linear().range([height, 0]);
+
+        var xAxis = d3.svg.axis()
+            .scale(x)
+            .orient("bottom")
+            .tickFormat(d3.time.format("%Y"));
+
+        var yAxis = d3.svg.axis()
+            .scale(y)
+            .orient("left")
+            .ticks(10);
+
+        var svgBar = d3.select("#barChart").append('svg')
+            .attr("class","bar")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        function bartoolTip(d){
+                return "<h4>"+d.rawYear+"</h4><table>"+
+                    "<tr><td>Death</td><td>"+d.value+"</td></tr>"+
+                    "</table>"; 
+        };
+        function mouseOverbar(d){
+            d3.select("#tooltip").transition().duration(200).style("opacity", .9);              
+            d3.select("#tooltip").html(bartoolTip(d))  
+            .style("left", (d3.event.pageX) + "px")     
+            .style("top", (d3.event.pageY - 28) + "px");
+        };
+
+        function mouseOutbar(){
+            d3.select("#tooltip").transition().duration(500).style("opacity", 0);      
+        };
+
+        x.domain(barData.map(function (d) {
+            return d.year;
+        }));
+        y.domain([0, d3.max(barData, function (d) {
+            return d.value;
+        })]);
+
+        svgBar.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis)
+            .selectAll("text")
+            .style("text-anchor", "end")
+            .attr("dx", "-.8em")
+            .attr("dy", "-.55em")
+            .attr("transform", "rotate(-90)");
+
+        svgBar.append("g")
+            .attr("class", "y axis")
+            .call(yAxis)
+            .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 6)
+            .attr("dy", ".71em")
+            .style("text-anchor", "end")
+            .text("Value");
+
+        // @todo: it seems that data must be bind with an dom element?
+        svgBar.selectAll(".bar")
+            .append('g')
+            .attr("class","bar_rect")
+            .data(barData)
+            .enter()
+            .append("rect")
+            .style("fill", "#1a9850")
+            .attr("x", function (d) {
+                return x(d.year);
+            })
+            .attr("width", x.rangeBand())
+            .attr("y", function (d) {
+                return y(d.value);
+            })
+            .attr("height", function (d) {
+                return height - y(d.value);
+            })
+            .on("mouseover", mouseOverbar).on("mouseout", mouseOutbar)
+            .on('click', function (data) {
+                filterCauseByYear(csvData, data.rawYear);
+            });
+
+    }
+    dispatch.on('load.USChart', function (data) {
+        var map = {};
+
+        //change the column in csv file to a map
+        for (var i = 0; i < data.length; i++) {
+            var key = data[i].state.substring(1);
+            if (!map.hasOwnProperty(key)) {
+                map[key] = 1;
+            } else {
+                map[key] += 1;
+            }
+        };
+
+        //change the map to an array of map
+        var USData = mapdataprocess1(map);
+        //console.log(USData[0]);
+        loadmapwithdata("#statesvg", USData);
+        //uStates.draw("#statesvg", USData);
+        });
+    var path = uStates.getpath();
+    //console.log(path[0].id);
+    function loadmapwithdata(id, data){
+        var death = [];
+        for (var i=0; i< data.length; i++){
+            death.push(data[i].death);
+        };
+
+        //console.log(data[0].path);
+        //console.log(path[0].id);
+
+        function maptoolTip(d){
+            for (var i in data){
+            if(data[i].state == d.id){
+                return "<h4>"+d.id+"</h4><table>"+
+                    "<tr><td>Death</td><td>"+(data[i].death)+"</td></tr>"+
+                    "</table>"; 
+            }
+            }
+        };
+        function mouseOvermap(d){
+            d3.select("#tooltip").transition().duration(200).style("opacity", .9);              
+            d3.select("#tooltip").html(maptoolTip(d))  
+            .style("left", (d3.event.pageX) + "px")     
+            .style("top", (d3.event.pageY - 28) + "px");
+        };
+
+        function mouseOutmap(){
+            d3.select("#tooltip").transition().duration(500).style("opacity", 0);      
+        };
+
+        function mapcolor(d){
+            for(var i in data){
+                if(data[i].state == d.id){
+                    return color(data[i].death); 
+                }
+            }
+        };
+        function dataupdate(d){
+            var selected_state = d.id;
+            //console.log(csvData);
+            var map1 ={},
+                map2 ={};
+            //console.log(csvData[0].year == 1970);
+            for (var i=0; i<csvData.length; i++){
+                if(selected_state == csvData[i].state.substring(1)){
+                    var key1 =csvData[i].cause,
+                        key2 =csvData[i].year;
+                    if (!map1.hasOwnProperty(key1)){
+                        map1[key1] = 1;
+                    }else{
+                        map1[key1] +=1;
+                    };
+                    if (!map2.hasOwnProperty(key2)){
+                        map2[key2] = 1;
+                    }else{
+                        map2[key2] +=1;
+                    };
+                }
+            };
+            //console.log(map2[1980]);
+            //console.log(barData);
+            var bubbleData = bubbledataprocess1(map1);
+            var barData = bardataprocess2(map2);
+            //console.log(barData[0]);
+            d3.select(".bar").remove();
+            d3.select("#pieChart svg").remove();
+            loadPieChartWithProvidedData(bubbleData);
+            loadBarChartWithProvidedData(barData);
+        };
+        //?????????????????????????????????????????????????
+        svgMap = d3.select("#map").append('svg')
+                .attr("height", "600").attr("width", "960")
+                .attr("id", "statesvg");
+
+
+        var color = d3.scale.linear().domain([d3.min(death),d3.max(death)]).range(["#ffffbf","#d73027"]);
+        d3.select(id).selectAll(".state")
+        .data(path)
+        .enter().append("path").attr("class","state_path")
+        .attr("d",function(d){ return d.d;})
+        .style("fill", mapcolor
+            //return "#084594";
+        )
+        .on("mouseover", mouseOvermap).on("mouseout", mouseOutmap)
+        .on("click", dataupdate);
+    };
+    function bubbledataprocess1(map){
+        bubbleData = [];
+        for (var key in map) {
+            var pair = {};
+            pair['cause'] = key;
+            pair['value'] = map[key];
+            bubbleData.push(pair);
+        };
+        //console.log(bubbleData);
+        return bubbleData;
+    };
+    function bardataprocess1(map){
+        var barData = [];
+        //change the map to an array of map
+        for (var key in map) {
+            var pair = {};
+            // year data for visualization
+            pair['year'] = parseDate(key);
+            // reserve the unparsed year data
+            pair['rawYear'] = key;
+            // number of killing
+            pair['value'] = map[key];
+            barData.push(pair);
+        };
+        //console.log(barData);
+        return barData;
+    }
+    function bardataprocess2(map){
+        var barData = [];
+            //change the map to an array of map
+        for (i = 1970; i<2016; i++) {
+            var pair = {};
+            // year data for visualization
+            pair['year'] = parseDate(i.toString());
+            // reserve the unparsed year data
+            pair['rawYear'] = i;
+            // number of killing
+            if (map[i] == undefined){
+                pair['value'] = 0;
+            }else{
+                pair['value'] = map[i];
+            }
+            
+            barData.push(pair);
+        };
+        return barData;
+    };
+    function mapdataprocess1(map){
+        var mapData = [];
+        for (var key in map) {
+            var pair = {};
+            pair['state'] = key;
+            pair['death'] = map[key];
+            pair['path'] = '';
+            mapData.push(pair);
+        };
+        return mapData;
+    };
+</script>
+</body>
+</html>
