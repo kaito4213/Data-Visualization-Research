@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/queue.v1.min.js"></script>
+    <script src="https://d3js.org/topojson.v1.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crossfilter/1.3.12/crossfilter.min.js"></script>
+	
+	<script src="radarChart.js"></script>
+	<script src="initScatter.js"></script>
+	<script src="initMap.js"></script>
+	
+	
+	<link rel="stylesheet" type="text/css" href="css/section1.css">
+	<link rel="stylesheet" type="text/css" href="css/section2.css">
+	<link rel="stylesheet" type="text/css" href="css/section3.css">
+  <title>Scrolling Sections</title>
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css"/>
+  <script type="text/javascript" src="jquery-1.3.1.min.js"></script>
+<script type="text/javascript" src="jquery.scrollTo.js"></script>
+
+<script>
+
+$(document).ready(function() {
+
+	$('a.btn').click(function () {
+
+		/*$('a.panel').removeClass('selected');
+		$(this).addClass('selected');*/
+		divselected = $('div.selected');
+		seq = parseInt(divselected.attr('seq'));
+		
+		current = $(this);
+		if(current.attr('typ') == 'next')
+		{
+			switch (seq){
+				case 3:
+					seq = seq +2;
+					break;
+				case 8:
+					seq = seq;
+					break;
+				default:
+					seq = seq + 1;
+				}
+		}
+		
+		if(current.attr('typ') == 'back')
+		{
+			switch (seq){
+				case 1:
+					seq = seq;
+					break;
+				case 5:
+					seq = seq - 2;
+					break;
+				default:
+					seq = seq - 1;
+				}
+		}
+		
+		divselected.removeClass('selected');
+		$('#item' + seq).addClass('selected');
+		
+		$('#wrapper').scrollTo($(this).attr('href') + seq, 500,{
+			onAfter : function(){
+				/*if(current.attr('typ') == 'back'){
+					if (seq == 1) current.attr("disabled","disabled");
+					else $('a.button').removeAttr("disabled"); 
+				}
+				if(current.attr('typ') == 'next'){
+					if (seq == 7) current.attr("disabled","disabled");
+					else $('a.button').removeAttr("disabled");
+				}*/
+			}
+		});		
+		
+		return false;
+	});
+
+	$(window).resize(function () {
+		resizePanel();
+	});
+	
+});
+
+function resizePanel() {
+
+	width = $(window).width();
+	height = $(window).height();
+
+	mask_width = width * $('.item').length;
+		
+	$('#debug').html(width  + ' ' + height + ' ' + mask_width);
+		
+	$('#wrapper, .item').css({width: width, height: height});
+	$('#mask').css({width: mask_width, height: height});
+	$('#wrapper').scrollTo($('a.selected').attr('href'), 0);
+		
+}
+
+</script>
+  
+<style>
+
+body {
+	background: #000 url(city.jpg);
+	background-size: cover;
+	height:100%;
+	width:100%;
+	margin:0;padding:0;
+	overflow:hidden;
+}
+
+#wrapper {
+	width:100%;
+	height:100%;
+	position:absolute;
+	top:0;left:0;
+	overflow:hidden;
+}
+
+	#mask {
+		width:750%;
+		height:100%;
+		
+	}
+
+	.item {
+		width:14%;
+		height:100%;
+		float:left;
+		
+	}
+	.subitem {
+		width:8%;
+		height:100%;
+		float:left;
+
+	}
+		.subitem1 {
+		width:6%;
+		height:100%;
+		float:left;
+
+	}
+	.subitem3{
+		width:7%;
+		height:100%;
+		float:left;
+
+	}
+	
+.content {
+		width:80%;
+		height:60%;
+		top:5%;
+		left:5%;
+		//margin: 100px 150px 100px 80px;
+		
+		position:relative;
+	}
+	#parallel svg{
+		//margin-left: 60px;
+		//margin-right: 80px;
+	}
+	/*.selected {
+		background:#fff;
+		font-weight:700;
+	}*/
+
+	.clear {
+		clear:both;
+	}
+#TotalDes h2, p{
+	width : 80%;
+	 white-space: normal;
+}
+
+.foot {
+
+  width:100%;
+  height:100px;
+  position:absolute;
+  bottom:0;
+  clear:both;
+ 
+  background: linear-gradient(to bottom, #d0d0d0, white);
+}
+.center{
+ text-align:left;
+ height:100%;	
+}
+.center- a{
+	margin-right: auto;
+	margin-left: auto;
+
+}
+.btn-default{
+background: linear-gradient(to bottom, #d0d0d0, white);
+	text-align:center;
+	color:#gray;
+	height:100%
+}
+
+
+h4{
+	color:#gray;
+	text-align:right;
+	width:95%;
+	
+}
+
+</style>
+</head>
+<body>
+
+<div id="wrapper">
+  <div id='mask'>
+	 <div id="item1" seq="1" class="item selected">
+        <div class="content">
+		
+			<div id="TotalDes" align = 'center'>
+				<h2>The radal chart shows the proportion of armed and unarmed death by races. The bar chart shows the death factors for each armed type</h2>
+				<p class="text-center">Center aligned text.werwewfwewjdwoeiuehfoeifweiofuoiwo 4ihfoewsfijosdijfieuowefesdflkje.sdflkjelsdkfjsiejhglsdkfjeisldkfjeisihglsdkfjsdlckldsnvlsdkfjeiosjflskfjlsdfjlkeghlsdkftext.werwewfwewjdwoeiuehfoeifweiofuoiwo4ihfoewsfijosdij fieuowefesdflkje.sdflkjelsdkfjsiejhglsdkfjeisl dkfjeisihglsdkfjsdlckldsnvlsdkfjeiosjflskfjl sdfjlkeghlsdkftext.werwewfwewjdwoeiuehfoeifw eiofuoiwo4ihfoewsfijosdijfieuowefesdflkje.sdf lkjelsdkfjsiejhglsdkfjeisldkfjeisihglsdkfjsd lckldsnvlsdkfjeiosjflskfjlsdfjlkeghlsdkftext.w erwewfwewjdwoeiuehfoeifweiofuoiwo4ihfoewsfijosd ijfieuowefesdflkje.sdflkjelsdkfjsiejhglsdkfjeisldk fjeisihglsdkfjsdlckldsnvlsdkfjeiosjflskfjlsdfjlkeghlsdkf</p>
+			</div>
+        Description1<br/><br/>Description1
+		</div>
+      </div>
+	  
+	  <div id="item2" seq="2" class="subitem1">
+        <div class="content">Map Description
+		<h2>The radal chart shows the proportion of armed and unarmed death by races. The bar chart shows the death factors for each armed type</h2>
+			<p class="text-center">Center aligned text.werwewfwewjdwoeiuehfoeifweiofuoiwo 4ihfoewsfijosdijfieuowefesdflkje.sdflkjelsdkfjsiejhglsdkfjeisldkfjeisihglsdkfjsdlckldsnvlsdkfjeiosjflskfjlsdfjlkeghlsdkftext.werwewfwewjdwoeiuehfoeifweiofuoiwo4ihfoewsfijosdij fieuowefesdflkje.sdflkjelsdkfjsiejhglsdkfjeisl dkfjeisihglsdkfjsdlckldsnvlsdkfjeiosjflskfjl sdfjlkeghlsdkftext.werwewfwewjdwoeiuehfoeifw eiofuoiwo4ihfoewsfijosdijfieuowefesdflkje.sdf lkjelsdkfjsiejhglsdkfjeisldkfjeisihglsdkfjsd lckldsnvlsdkfjeiosjflskfjlsdfjlkeghlsdkftext.w erwewfwewjdwoeiuehfoeifweiofuoiwo4ihfoewsfijosd ijfieuowefesdflkje.sdflkjelsdkfjsiejhglsdkfjeisldk fjeisihglsdkfjsdlckldsnvlsdkfjeiosjflskfjlsdfjlkeghlsdkf</p>
+			<div id="MapDes" align = 'center'><!-- Map Description container --></div>
+			
+		</div>
+      </div>
+	  
+      <div id="item3" seq="3" class="subitem">
+        <div class="content">Map
+			<div id="map" align = 'center'><!-- Map container --></div>
+			
+        Description1<br/><br/>Description1
+		</div>
+      </div>
+	  <!--skip the item4 -parallel!!!-->
+	  
+	   <div id="item4" seq="4" class="subitem3">
+        <div class="content">Parallea 
+			<div id="parallel" align = 'center'></div>
+			
+       Description2
+	   </div>
+      </div>
+	  
+      <div id="item5" seq="5" class="item">
+        <div class="content">Section 2 title 
+			<div id="sub_container2"></div>
+       Description2
+	   </div>
+      </div>
+	  
+	  
+	  <div id="item6" seq="6" class="item">
+        <div class="content">Scatter & pie
+        The radal chart shows the proportion of armed and unarmed death by races. The bar chart shows the death factors for each armed type.
+			<div id="canvas"></div>
+			
+			</div>
+      </div>
+	  
+	  
+      <div id="item7" seq="7" class="item">
+        <div class="content">Armed or Unarmed?
+        The radal chart shows the proportion of armed and unarmed death by races. The bar chart shows the death factors for each armed type.
+			<div id="chart"></div>
+			<div id="chart2"></div>
+			
+			</div>
+      </div>
+	  <div id="item8" seq="8" class="item">
+        <div class="content">
+		<h1>Conculusion<h1>
+        <h2>The radal chart shows the proportion of armed and unarmed death by races. The bar chart shows the death factors for each armed type.</h2>
+			
+			</div>
+      </div>
+ 
+  </div>
+  
+</div>
+<div class="foot">
+	<div class="center">
+			<a href="#item" typ = "back" class="btn btn-default btn-lg ">&nbsp&nbsp Perv &nbsp&nbsp </a>
+			<a href="#item" typ = "next" class="btn btn-default btn-lg ">&nbsp&nbsp Next &nbsp&nbsp</a>
+	</div>
+<!--
+			<h4>Team:Qinmei Wu</h4>
+			<h4>Team:Jiaoyan Chen</h4>
+			<h4>Team:Xiaojun Wang</h4>
+			-->
+</div>
+<!--<script src="initParallel.js"></script>-->
+
+
+<script>
+
+initMap.draw();
+initScatter.draw();
+var width = 150,
+    height = 150;
+
+var config = {
+    w: width,
+    h: height,
+    levels: 5,
+   // ExtraWidthX: 300
+}
+var maxValues = [350,200,100,20,10,10];
+var radorColor = ["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"];
+
+d3.csv("data.csv", function(error, data) {
+    if (error) throw error;
+	var newData = d3.nest()
+					.key(function(d) { return d.raceethnicity; })
+					.rollup(function(v) { return {
+							race: d3.nest().key(function(d) { return d.armed;}).rollup(function(f) {return f.length}).entries(v)
+							};}).entries(data);
+	var armedData = d3.nest().key(function(d) { return d.armed; }).entries(data);
+	console.log(newData);
+	//var nndata = [];
+	//nndata.push(newData[0]);
+	for (i = 0; i < newData.length; i++) {
+	var nndata = [];
+	nndata.push(newData[i]);
+		 radarChart.draw("#chart",nndata ,armedData, config ,maxValues[i], radorColor[i]);
+	};
+   
+});
+</script>
+</script>
+<!--<script src="js/d3.js"></script>
+<script src="js/queue.js"></script>
+<script src="js/scroller.js"></script>
+<script src="js/sections.js"></script>-->
+</body>
+</html>

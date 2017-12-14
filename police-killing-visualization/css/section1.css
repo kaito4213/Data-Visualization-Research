@@ -1,0 +1,73 @@
+    	body {
+      font-family: "Helvetica Neue", Helvetica, sans-serif;;
+      font-size: 12px;
+      width: 960px;
+      height: 500px;
+      margin: 20px auto;
+      }
+/*geo map stroke*/
+		.states {
+    stroke: #999;
+    fill: none;
+    pointer-events: none;
+    }
+
+    .state-land{
+    stroke: #999;
+    fill: green;
+    stroke-width: 1.5px;
+    }
+
+    .county-land {
+      stroke: white;
+      stroke-width: .3px;
+    }
+/*legend position*/
+   .legend {
+	  
+    position:absolute;
+    left:140px;
+    top:10px;
+    }
+
+   .axis text {
+   font: 10px sans-serif;
+   fill:black;
+   text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+   cursor: move;
+   }
+
+   .axis line, .axis path {
+   fill: none;
+   stroke: #000;
+   shape-rendering: crispEdges;
+   }
+
+/*tooltip color*/
+    .tooltip {
+    background: rgba(0, 0, 0, 0.85);
+    color: #f9f9f9;
+    padding: 8px;
+    }
+    .tooltip h3 {
+    margin: 0px 0px 8px;
+    }
+
+/*parallel cooridinate*/
+    .background path {
+      fill: none;
+      stroke: #ddd;
+      shape-rendering: crispEdges;
+      stroke-opacity: 0.3;
+    }
+
+    .foreground path {
+       fill: none;
+        stroke: #f4a641;
+    }
+
+    .brush .extent {
+       fill-opacity: .3;
+       stroke: #fff;
+       shape-rendering: crispEdges;
+    }
