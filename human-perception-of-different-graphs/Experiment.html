@@ -1,0 +1,419 @@
+457 lines (408 sloc)  14.4 KB
+<!DOCTYPE html>
+<html>
+    <head lang= "en">
+      <meta charset="utf-8">
+      <script src="https://d3js.org/d3.v3.min.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>    
+    <h1 style= ' text-align: center'>Yimin Lin & Jiaoyan Chen Assignment 3-- Experiment</h1>
+    <style type="text/css">
+    .button {
+    position: relative;
+    top:68%;
+    left:30%;
+      display: inline-block;
+    padding: 10px 20px;
+    font-size: 24px;
+      cursor: pointer;
+      text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 9px #999;
+    }
+    .button:hover {background-color: #3e8e41}
+    .button:active {
+      background-color: #3e8e41;
+      box-shadow: 0 5px #666;
+      transform: translateY(4px);
+    }
+    input[type=tel] {
+      position: relative;
+      top:68%;
+      left:20%;
+        width: 50%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        box-sizing: border-box;
+            border: 3px solid #ccc;
+            -webkit-transition: 0.5s;
+            transition: 0.5s;
+            outline: none;
+    }
+    input[type=tel]:focus {
+        border: 3px solid #555;
+    }
+    #chart{
+      width: 600px;
+      height:400px;
+      border: 1px;
+      margin-right: 10px;
+      margin-left: 100px;
+      float:left;
+    }
+    #input{
+      width:500px;
+      height:400px;
+      border:1px;
+      margin-right: 10px;
+      float: left;
+    }
+    #paragraph{
+      float: top;
+      margin-top: 100px;
+    }
+    rect {
+          stroke: black;
+    }
+    .center {
+          text-align: center;
+    }
+    </style>
+  </head>
+  <body>
+
+  <!--Set the page into two div, one for chart and one for description/button/input -->
+  <div id = "chart">
+     <div id = "chartContainer"  align = "center" ></div>
+     <!--div id = "progressBar" align = "center"></div-->
+     <div id = "progressBar" align = "center" ></div>
+     <div id = 'progressnum' align = "center"></div>
+  </div>
+    <div id = "input">
+    <div id = 'paragraph'>
+      <p style="text-align: center;">Two values are marked with dots.</p>
+      <p style="text-align: center;">What do you think the <b style="font-style: italic; font-size: 25px" >percent</b> of the smaller value to the larger value?</p>
+      <p style="text-align: center;">Please put your answer below.</p>
+      <p style="text-align: center;">e.g.If you think the small one is exactly a half of the bigger one,</p>
+      <p style="text-align: center;">please input "50".</p>
+    </div>
+      <input id = 'inputvalue' type="tel" onkeypress="return event.charCode>=48 && event.charCode<=57" placeholder="Enter 0~100 Here">
+      <button id = 'button' class="button" onclick="test()">Next</button>
+    </div>
+
+
+
+    <script type = "text/javascript">
+      var inputvalue = 0,
+          d = new Date()
+          userid = String(d.getHours())+String(d.getSeconds())+String(d.getMinutes())+String(d.getMilliseconds()),
+          userinputs = [],
+          trialnum = 0,
+          max_trial = 60,
+          act_percent_array =[],
+          act_percent = 0,
+          accuracy_array = [],
+          trial_array = [],
+          plottype = '',
+          plottype_array = [];
+          output = [['userid','No.','plottype','userinput','act_percent','accuracy']];
+      //Create an array and shuffle it for the funtion to plot
+      var plotlist =[];
+      for (i=0; i<3; i++){
+        for(j=0; j<21; j++){
+          plotlist.push(i);
+        };
+      };
+
+      function shuffle(array){
+        var currentindex = array.length,
+            temp,
+            randomindex;
+            while(0!= currentindex)
+            {
+                randomindex = Math.floor(Math.random()*currentindex);
+                currentindex -= 1;
+                temp = array[currentindex];
+                array[currentindex] = array[randomindex];
+                array[randomindex] = temp;
+            };
+        return array;
+      }
+      //console.log(plotlist);
+      //shuffle(plotlist);//create a random sequence.
+      //console.log(plotlist);
+      function test(){
+        inputvalue = Number(document.getElementById('inputvalue').value);
+        //console.log(typeof(inputvalue));
+        if(inputvalue ==''){
+                 alert("You must input a number!");
+          return;
+        };
+        if(inputvalue >100|| inputvalue < 0){
+                 alert("The input number must between 0 and 100!");
+          return;
+        };
+        progress(trialnum);
+        trialnum += 1;
+        userinputs.push(inputvalue.toFixed(1));
+        act_percent_array.push(act_percent.toFixed(1));
+        accuracy = count_accuracy(act_percent, inputvalue);
+        accuracy_array.push(accuracy.toFixed(1));
+        trial_array.push(trialnum);
+        plottype_array.push(plottype);
+        document.getElementById('progressnum').innerHTML= trialnum+1+"/60";
+        //console.log(act_percent_array);
+        //console.log(accuracy_array);
+        //console.log(trial_array);
+        if(trialnum <max_trial){
+          shownextplot();
+        }
+        else{
+          outputcsv();
+          initial();
+          ends();
+        }
+        
+      };
+      function initial(){
+        svg.selectAll('*').remove();
+        d3.select("#inputvalue").property("value","");
+      };
+      function chooseplot(num){
+        if(num == 0){
+          drawpie();
+          plottype = 'Pie Chart';
+        }
+        else if(num ==1){
+          drawHbar();
+          plottype = 'Horizontal Bar Chart';
+        }
+        else{
+          drawtree();
+          plottype = 'Tree Chart';
+        }
+      };
+      function showfirstplot(){
+          chooseplot(plotlist[trialnum]);
+          document.getElementById('progressnum').innerHTML= trialnum+1+"/60";
+      };
+      
+      function shownextplot(){
+        initial();
+        chooseplot(plotlist[trialnum]);
+      };
+      function count_actual_per(num1, num2){
+        if(num1 >= num2){
+          largenum = num1;
+          smallnum = num2;
+        }
+        else{
+          largenum = num2;
+          smallnum = num1;
+        };
+        percent = (smallnum/largenum)*100
+        return percent;
+      };
+      function count_accuracy(trueper, userinp){
+        accuracy_scaled = Math.abs(trueper - userinp) + 1/8;
+        if(accuracy_scaled <=1){
+          accuracy = 0;
+        }
+        else{
+          accuracy = Math.log2(accuracy_scaled);
+        }
+        return accuracy;
+      };
+      function outputcsv(){
+        for(i=0; i< max_trial; i++){
+          output[i+1] =[
+          userid,
+          trial_array[i],
+          plottype_array[i],
+          userinputs[i],
+          act_percent_array[i],
+          accuracy_array[i]
+          ]
+        }
+        var data = output;
+        var csvContent = "data:text/csv;charset=utf-8,";
+        data.forEach(function(infoArray, index){
+            dataString = infoArray.join(",");
+            csvContent += index < data.length ? dataString+ "\n" : dataString;
+        }); 
+        var encodedUri = encodeURI(csvContent);
+        var link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", userid+"_my_data.csv");
+        document.body.appendChild(link); // Required for FF
+        link.click(); // This will download the data file named "my_data.csv".
+      };
+        //console.log(d3); // test if d3 is loaded
+      <!-- Generate 10 random dataset and dotsindex -->
+      function randomdata(){
+        var dataset = new Array();
+      for (i = 0; i<10; i++){
+          dataset[i] = Math.floor(Math.random()*100)+1;// data must have at least 1
+        };
+        return dataset;
+      };
+            
+      function dotsindex(){
+        var dots = new Array();
+        for (i = 0; i<2; i++){
+          dots[i] = Math.floor(Math.random()*10);
+        };
+        // dots index cannot be neither the same number not the adjacent number(reduce noise)
+        while (dots[0] == dots[1]|| Math.abs(dots[0]-dots[1]==1)){
+          dots[1] = Math.floor(Math.random()*10);
+        };
+        return dots;
+      }
+      <!-- Setup Margin-->
+    var margin = {top: 20, right: 20, bottom: 30, left: 40},
+        width = 600 - margin.left - margin.right,
+        height = 400 - margin.top - margin.bottom;
+    <!-- Setup svg-->
+    var svg = d3.select("#chartContainer").append("svg:svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      $("svg").css({top: 10, left: 10, position: 'relative'});//Center the canvas
+      //add a progress bar
+      var svgLine = d3.select("#progressBar")
+                        .append("svg:svg")
+                        .attr("width", 600)   
+                        .attr("height", 50)
+                        //.append("g");
+                        //.attr("transform", "translate(" + margin.left + ")", 0)
+      var myLine = svgLine.append("svg:line")
+                    .attr("x1", 0)
+                    .attr("y1", 30)
+                    .attr("x2", 650)
+                    .attr("y2", 30)
+                    .style("stroke", "black")
+                    .style("stroke-width", "2");
+      var rect = svgLine.append("svg:rect")
+                    .attr("x", 0)
+                    .attr("y", 20)
+                    .attr("width", 10)
+                    .attr("height", 20)
+                    .style("stroke", "grey")
+                    .style("fill", "grey");
+      // draw the square that shows how many trials you have taken
+      function progress(trials){
+        var rect = svgLine.append("svg:rect")
+                    .attr("x", 10*(trials+1))
+                    .attr("y", 20)
+                    .attr("width", 10)
+                    .attr("height", 20)
+                     .style("stroke", "grey")
+                    .style("fill", "grey");
+        };
+      <!-- Draw Pie Chart-->
+      function drawpie(){
+        svg.append("line").attr("x1",0).attr("y1", height-50).attr("x2",0+11*50).attr("y2", height-50).attr("stroke-width",2).attr("stroke","black");
+        svg.append("line").attr("x1",0).attr("y1", height-50).attr("x2",0).attr("y2", 0).attr("stroke-width",2).attr("stroke","black");
+        var dataset = randomdata(),
+            dots = dotsindex(),
+            pie = d3.layout.pie(),
+            mypie = pie(dataset);
+        act_percent = count_actual_per(dataset[dots[0]], dataset[dots[1]]);
+        //console.log(mypie)
+        var radius = 130,
+          arc = d3.svg.arc().innerRadius(0).outerRadius(radius),
+          path = svg.selectAll('g')
+          .data(mypie)
+          .enter()
+          .append("path")
+          .attr('d', arc)
+          .attr('stroke', 'black')
+          .attr('stroke-width',2)
+          .attr('fill','none')
+          .attr("transform","translate("+width/2+","+height/2.2+")");
+        //Add point       
+        svg.append('circle')
+        .attr('cx', width/2+5*(Math.sin(mypie[dots[0]].endAngle-((mypie[dots[0]].endAngle-mypie[dots[0]].startAngle)/2))*15))
+        .attr('cy', height/2.2-5*(Math.cos(mypie[dots[0]].endAngle-((mypie[dots[0]].endAngle-mypie[dots[0]].startAngle)/2))*15))
+        .attr('r', 5)
+        .attr('fill', "black");
+        svg.append('circle')
+        .attr('cx', width/2+5*(Math.sin(mypie[dots[1]].endAngle-((mypie[dots[1]].endAngle-mypie[dots[1]].startAngle)/2))*15))
+        .attr('cy', height/2.2-5*(Math.cos(mypie[dots[1]].endAngle-((mypie[dots[1]].endAngle-mypie[dots[1]].startAngle)/2))*15))
+        .attr('r', 5)
+        .attr('fill', "black");
+      }
+      <!-- Draw Horizontal Bar Chart-->
+      function drawHbar(){
+        svg.append("line").attr("x1",0).attr("y1", height-50).attr("x2",0+11*50).attr("y2", height-50).attr("stroke-width",2).attr("stroke","black");
+        svg.append("line").attr("x1",0).attr("y1", height-50).attr("x2",0).attr("y2", 0).attr("stroke-width",2).attr("stroke","black");
+        var dataset = randomdata(),
+            dots = dotsindex();
+        act_percent = count_actual_per(dataset[dots[0]], dataset[dots[1]]);
+        for( i = 0; i< 10; i++){
+        var Hbar = svg.append("rect")
+               .attr("class","bar")
+               .attr("x", 25+(i*50))
+               .attr("width", 40)
+               .attr("y", height-50-(dataset[i]*2.5))
+               .attr("height", (dataset[i]*2.5))
+               .attr('stroke', 'black')
+               .attr('stroke-width',2)
+               .attr('fill','none')
+        }
+        for (i = 0; i <2; i++){
+          svg.append("circle")
+             .attr('cx', 45+(dots[i]*50))
+             .attr('cy',height-60)
+             .attr('r',5)
+             .attr('fill', "black")
+        }
+      }
+      <!--Draw Tree Chart-->
+      function drawtree() {
+        svg.append("line").attr("x1",0).attr("y1", height-50).attr("x2",0+11*50).attr("y2", height-50).attr("stroke-width",2).attr("stroke","black");
+        svg.append("line").attr("x1",0).attr("y1", height-50).attr("x2",0).attr("y2", 0).attr("stroke-width",2).attr("stroke","black");
+        var dots = dotsindex();
+        data = []
+        var tree = {
+          children : data
+        };
+        for (i = 0; i<10; i++){
+          value = Math.floor(Math.random()*100)+1;
+          var child = {};
+          child["size"] = value;
+          child["index"] = i;
+          data[i] = child;
+        };
+        act_percent = count_actual_per(data[dots[0]].size, data[dots[1]].size);    
+        var treemap = d3.layout.treemap()
+                          .size([width/1.5,height/1.5])
+                          .sticky(true)
+                          .value(function(d) { return d.size; });
+         
+        var cell = svg.data([tree]).selectAll("g")
+                       .data(treemap)
+                       .enter().append("g")
+                       .attr("class", "cell")
+                       .attr("transform", function(d) { return "translate(" + (d.x+50)  + "," + (d.y+30)  + ")"; });
+        cell.append("rect")
+             .attr("width", function(d) { return d.dx; })
+             .attr("height", function(d) { return d.dy; })
+             .style("fill", function(d) { return "none"; });
+               svg.select("g").select("g").remove();
+        cell.append("text")
+             .attr("x", function(d) { return d.dx/2 ; })
+             .attr("y", function(d) { return d.dy/2 ; })
+             .attr("dy", ".35em")
+             .attr("text-anchor", "middle")
+             .text(function (d) { return (d.index == dots[0])||(d.index == dots[1]) ? "\u25CF" : null; });
+        };
+        function ends() {
+          d3.select("#chartContainer").remove();
+          d3.select("#progressBar").remove();
+          d3.select("#input").remove();
+          d3.select("#progressnum").remove();
+          d3.select("#chart").append("text").attr("x",900).attr("y",800).text("Thanks!")
+        };
+      shuffle(plotlist);//create a random sequence.
+      showfirstplot();
+      
+      //console.log(trialnum)
+      
+  </script>
+  </body>
+</html>
